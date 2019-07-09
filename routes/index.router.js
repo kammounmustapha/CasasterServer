@@ -1,13 +1,21 @@
 const express = require("express");
 const router = express.Router();
-
+const passport = require("passport");
 const ctrlUser = require("../controllers/user.controller");
 
 const jwtHelper = require("../config/jwtHelper");
 
-router.post("/register", ctrlUser.register);
-router.post("/authenticate", ctrlUser.authenticate);
-router.get("/userProfile", jwtHelper.verifyJwtToken, ctrlUser.userProfile);
-router.get("/usersList", jwtHelper.verifyJwtToken, ctrlUser.usersProfiles);
-router.delete("/userDelete", jwtHelper.verifyJwtToken, ctrlUser.userDelete);
+router.post("/signup", ctrlUser.singup);
+router.post("/signin", ctrlUser.signin);
+router.get(
+  "/userProfile",
+  passport.authenticate("jwt", { session: false }),
+  ctrlUser.userProfile
+);
+router.get(
+  "/usersList",
+  passport.authenticate("jwt", { session: false }),
+  ctrlUser.usersList
+);
+router.delete("/userDelete", ctrlUser.userDelete);
 module.exports = router;

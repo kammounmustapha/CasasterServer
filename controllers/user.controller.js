@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 const passport = require("passport");
 const _ = require("lodash");
-
+const bcrypt = require("bcryptjs");
 const User = mongoose.model("User");
-
-module.exports.register = (req, res, next) => {
+const jwt = require("jsonwebtoken");
+module.exports.singup = (req, res, next) => {
   var user = new User();
   user.fullName = req.body.fullName;
   user.email = req.body.email;
@@ -20,23 +20,39 @@ module.exports.register = (req, res, next) => {
   });
 };
 
-module.exports.authenticate = (req, res, next) => {
-  // call for passport authentication
-  passport.authenticate("local", (err, user, info) => {
-    // error from passport middleware
-    if (err) return res.status(400).json(err);
-    // registered user
-    else if (user)
-      return res
-        .status(200)
-        .json({ token: user.generateJwt(), email: user.email });
-    // unknown user or wrong password
-    else return res.status(404).json(info);
-  })(req, res);
+module.exports.signin = (req, res, next) => {
+  var email = req.body.email;
+  var password = req.body.password;
+  User.findOne({ email: email }, (err, user) => {
+    if (!user) {
+      return res.status(404).json(err);
+    }
+    bcrypt.compare(password, user.password, (err, isMatch) => {
+      if (isMatch) {
+        const payload = {
+          id: user._id,
+          email: user.email
+        };
+        jwt.sign(
+          payload,
+          process.env.JWT_SECRET,
+          {
+            expiresIn: process.env.JWT_EXP
+          },
+          (err, token) => {
+            if (err) res.status(500).json({ message: "Error signing token" });
+            res.json({ status: true, token: `Bearer ${token}` });
+          }
+        );
+      } else {
+        res.status(400).json({ message: "Password is incorrect!" });
+      }
+    });
+  });
 };
 
 module.exports.userProfile = (req, res, next) => {
-  User.findOne({ _id: req._id }, (err, user) => {
+  User.findOne({ _id: req.user._id }, (err, user) => {
     if (!user)
       return res
         .status(404)
@@ -49,8 +65,8 @@ module.exports.userProfile = (req, res, next) => {
   });
 };
 
-module.exports.usersProfiles = (req, res, next) => {
-  User.find({ _id: { $ne: req._id } })
+module.exports.usersList = (req, res, next) => {
+  User.find({ _id: { $ne: req.user._id } })
     .select("fullName email role -_id")
     .exec(function(err, users) {
       if (err)
@@ -63,7 +79,6 @@ module.exports.usersProfiles = (req, res, next) => {
           users: users
         });
     });
-  console.log(req._id);
 };
 
 module.exports.userDelete = (req, res, next) => {

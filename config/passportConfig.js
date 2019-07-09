@@ -1,30 +1,26 @@
 const passport = require("passport");
-const localStrategy = require("passport-local").Strategy;
 const mongoose = require("mongoose");
-
+var JwtStrategy = require("passport-jwt").Strategy,
+  ExtractJwt = require("passport-jwt").ExtractJwt;
 var User = mongoose.model("User");
-
+const opts = {
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET,
+  passReqToCallback: true
+};
 passport.use(
-  new localStrategy({ usernameField: "email" }, (username, password, done) => {
-    User.findOne({ email: username }, (err, user) => {
-      if (err) return done(err);
-      // unknown user
-      else if (!user)
-        return done(null, false, { message: "Email is not registered" });
-      // wrong password
-      else if (!user.verifyPassword(password))
-        return done(null, false, { message: "Wrong password." });
-      // authentication succeeded
-      else return done(null, user);
+  new JwtStrategy(opts, function(req, jwt_payload, done) {
+    User.findOne({ id: jwt_payload._id }, function(err, user) {
+      if (err) {
+        return done(err, false);
+      }
+      if (user) {
+        req.user = user;
+        return done(null, user);
+      } else {
+        return done(null, false);
+        // or you could create a new account
+      }
     });
   })
 );
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
