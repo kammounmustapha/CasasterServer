@@ -9,6 +9,7 @@ const cors = require("cors");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const rtsIndex = require("./routes/index.router");
+const companyIndex = require("./routes/company.router");
 
 // middleware
 
@@ -27,6 +28,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
 app.use("/api", rtsIndex);
+app.use(companyIndex);
 app.use(express.json());
 // error handler
 app.use((err, req, res, next) => {

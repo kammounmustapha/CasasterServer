@@ -28,3 +28,11 @@ module.exports.requireSuperAdmin = (req, res, next) => {
     next();
   }
 };
+
+module.exports.requireAdmin = (req, res, next) => {
+  if (req.user.role !== "4" && req.user.role !== "2") {
+    res.json({ status: false, message: "permission denied" });
+  } else {
+    next();
+  }
+};
