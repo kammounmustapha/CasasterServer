@@ -41,7 +41,7 @@ module.exports.signin = (req, res, next) => {
           },
           (err, token) => {
             if (err) res.status(500).json({ message: "Error signing token" });
-            res.json({ status: true, token: `Bearer ${token}` });
+            res.json({ status: true, token: `Bearer ${token}`, user: user });
           }
         );
       } else {
@@ -82,16 +82,13 @@ module.exports.usersList = (req, res, next) => {
 };
 
 module.exports.userDelete = (req, res, next) => {
-  User.findOneAndDelete({ _id: req.body.userId }, (err, doc) => {
-    if (err) {
-      res.status(402).json({ message: "cannot delete" });
-    } else if (!doc) {
-      res.status(403).json({ message: "user not found!" });
-    } else {
-      res.status(200).json({
+  User.findOneAndDelete({ _id: req.body.userId }, (err, user) => {
+    if (err) res.json({ status: false, message: err });
+    else
+      res.json({
         status: true,
-        doc: doc
+        message: "User deleted successfuly",
+        user: user
       });
-    }
   });
 };

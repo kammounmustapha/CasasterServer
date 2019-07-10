@@ -5,7 +5,12 @@ const ctrlUser = require("../controllers/user.controller");
 
 const jwtHelper = require("../config/jwtHelper");
 
-router.post("/signup", ctrlUser.singup);
+router.post(
+  "/signup",
+  passport.authenticate("jwt", { session: false }),
+  jwtHelper.requireSuperAdmin,
+  ctrlUser.singup
+);
 router.post("/signin", ctrlUser.signin);
 router.get(
   "/userProfile",
@@ -17,5 +22,10 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   ctrlUser.usersList
 );
-router.delete("/userDelete", ctrlUser.userDelete);
+router.delete(
+  "/userDelete",
+  passport.authenticate("jwt", { session: false }),
+  jwtHelper.requireSuperAdmin,
+  ctrlUser.userDelete
+);
 module.exports = router;

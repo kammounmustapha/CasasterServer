@@ -10,12 +10,12 @@ const opts = {
 };
 passport.use(
   new JwtStrategy(opts, function(req, jwt_payload, done) {
-    User.findOne({ id: jwt_payload._id }, function(err, user) {
+    User.findOne({ _id: jwt_payload.id }, function(err, user) {
       if (err) {
         return done(err, false);
       }
       if (user) {
-        req.user = user;
+        //req.user = user;
         return done(null, user);
       } else {
         return done(null, false);

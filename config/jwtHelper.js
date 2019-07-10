@@ -20,3 +20,11 @@ module.exports.verifyJwtToken = (req, res, next) => {
     });
   }
 };
+
+module.exports.requireSuperAdmin = (req, res, next) => {
+  if (req.user.role !== "4") {
+    res.json({ status: false, message: "permission denied" });
+  } else {
+    next();
+  }
+};
