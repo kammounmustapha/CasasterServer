@@ -9,6 +9,7 @@ mongoose.connect(process.env.MONGODB_URI, err => {
     );
   }
 });
-
+require("./license.model");
+require("./licenseApplication.model");
 require("./user.model");
 require("./company.model");

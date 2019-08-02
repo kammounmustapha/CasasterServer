@@ -11,7 +11,7 @@ module.exports.singup = (req, res, next) => {
   user.password = req.body.password;
   user.role = req.body.role;
   user.save((err, doc) => {
-    if (!err) res.send(doc);
+    if (!err) res.status(200).json(doc);
     else {
       if (err.code == 11000)
         res.status(422).send(["Duplicate email adrress found."]);
@@ -31,7 +31,9 @@ module.exports.signin = (req, res, next) => {
       if (isMatch) {
         const payload = {
           id: user._id,
-          email: user.email
+          email: user.email,
+          fullName: user.fullName,
+          role: user.role
         };
         jwt.sign(
           payload,
@@ -41,7 +43,7 @@ module.exports.signin = (req, res, next) => {
           },
           (err, token) => {
             if (err) res.status(500).json({ message: "Error signing token" });
-            res.json({ status: true, token: `Bearer ${token}`, user: user });
+            res.status(200).json({ token: `Bearer ${token}` });
           }
         );
       } else {
@@ -54,13 +56,10 @@ module.exports.signin = (req, res, next) => {
 module.exports.userProfile = (req, res, next) => {
   User.findOne({ _id: req.user._id }, (err, user) => {
     if (!user)
-      return res
-        .status(404)
-        .json({ status: false, message: "User record not found." });
+      return res.status(404).json({ message: "User record not found." });
     else
       return res.status(200).json({
-        status: true,
-        user: _.pick(user, ["fullName", "email", "role"])
+        data: _.pick(user, ["fullName", "email", "role"])
       });
   });
 };
@@ -76,7 +75,7 @@ module.exports.usersList = (req, res, next) => {
       else
         return res.status(200).json({
           status: true,
-          users: users
+          data: users
         });
     });
 };
@@ -88,7 +87,7 @@ module.exports.userDelete = (req, res, next) => {
       res.json({
         status: true,
         message: "User deleted successfuly",
-        user: user
+        data: user
       });
   });
 };

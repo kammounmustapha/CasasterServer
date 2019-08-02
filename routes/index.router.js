@@ -18,7 +18,7 @@ router.get(
   ctrlUser.userProfile
 );
 router.get(
-  "/usersList",
+  "/",
   passport.authenticate("jwt", { session: false }),
   ctrlUser.usersList
 );
