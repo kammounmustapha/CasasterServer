@@ -13,3 +13,4 @@ require("./license.model");
 require("./licenseApplication.model");
 require("./user.model");
 require("./company.model");
+require("./action.model");

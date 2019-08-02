@@ -12,6 +12,8 @@ const rtsIndex = require("./routes/index.router");
 const companyIndex = require("./routes/company.router");
 const licenseApplicationIndex = require("./routes/licenseApplication.router");
 const licenseIndex = require("./routes/license.router");
+const actionsIndex = require("./routes/action.router");
+
 // middleware
 
 var app = express();
@@ -33,6 +35,7 @@ app.use(licenseApplicationIndex);
 app.use("/users", rtsIndex);
 app.use(companyIndex);
 app.use(licenseIndex);
+app.use(actionsIndex);
 app.use(express.json());
 // error handler
 app.use((err, req, res, next) => {
