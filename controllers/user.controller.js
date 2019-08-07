@@ -4,6 +4,7 @@ const _ = require("lodash");
 const bcrypt = require("bcryptjs");
 const User = mongoose.model("User");
 const jwt = require("jsonwebtoken");
+
 module.exports.singup = (req, res, next) => {
   var user = new User();
   user.fullName = req.body.fullName;
@@ -13,7 +14,7 @@ module.exports.singup = (req, res, next) => {
   user.save((err, doc) => {
     if (!err) res.status(200).json(doc);
     else {
-      if (err.code == 11000)
+      if (err.code === 11000)
         res.status(422).send(["Duplicate email adrress found."]);
       else return next(err);
     }

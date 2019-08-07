@@ -4,7 +4,7 @@ var Company = mongoose.model("Company");
 module.exports.companiesList = (req, res, next) => {
   Company.find((err, companies) => {
     if (err) res.json(err);
-    else res.json({ status: true, comapnies: companies });
+    else res.json({ status: true, companies: companies });
   });
 };
 
@@ -34,17 +34,6 @@ module.exports.createCompany = (req, res, next) => {
 };
 
 module.exports.update = (req, res, next) => {
-  /* const updatedCompany = {
-    fullName: req.body.fullName,
-    type: req.body.type,
-    registrationNumber: req.body.registrationNumber,
-    industry: req.body.industry,
-    headquarters: req.body.headquarters,
-    areaServed: req.body.areaServed,
-    website: req.body.website,
-    email: req.body.email,
-    phoneNumber: req.body.phoneNumber
-  }; */
   Company.findByIdAndUpdate(
     req.params.id,
     req.body,
