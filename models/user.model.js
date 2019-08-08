@@ -51,5 +51,5 @@ userSchema.methods.generateJwt = function() {
     expiresIn: process.env.JWT_EXP
   });
 };
-
+userSchema.set("timestamps", true);
 mongoose.model("User", userSchema);

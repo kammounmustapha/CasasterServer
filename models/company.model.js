@@ -32,5 +32,5 @@ var companySchema = new mongoose.Schema({
     type: String
   }
 });
-
+companySchema.set("timestamps", true);
 mongoose.model("Company", companySchema);

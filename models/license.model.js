@@ -4,4 +4,5 @@ var licenseSchema = new mongoose.Schema({
   geometry: mongoose.Schema.Types.Mixed,
   properties: mongoose.Schema.Types.Mixed
 });
+licenseSchema.set("timestamps", true);
 mongoose.model("License", licenseSchema);

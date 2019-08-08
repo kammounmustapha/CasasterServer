@@ -9,4 +9,5 @@ var shapeSchema = mongoose.Schema({
   licenseId: String,
   createdAt: String
 });
+shapeSchema.set("timestamps", true);
 mongoose.model("Action", shapeSchema);
