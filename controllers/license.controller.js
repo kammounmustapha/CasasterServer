@@ -58,8 +58,8 @@ module.exports.getAll = (req, res, next) => {
 };
 
 module.exports.getById = (req, res, next) => {
-  License.findById(req.params.id, (err, res) => {
+  License.findById(req.params.id, (err, doc) => {
     if (err) res.status(400).json(err);
-    else res.status(200).json({ doc: res });
+    else res.status(200).json({ doc: doc });
   });
 };

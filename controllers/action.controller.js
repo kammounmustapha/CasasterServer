@@ -9,11 +9,7 @@ module.exports.create = (req, res, next) => {
     dateDue: req.body.dateDue,
     completed: req.body.completed,
     responsibleUser: req.body.responsibleUser,
-    licenseId: req.body.licenseId,
-    createdAt: new Date()
-      .toString()
-      .replace(/T/, ":")
-      .replace(/\.\w*/, "")
+    licenseId: req.body.licenseId
   });
   action.save((err, doc) => {
     if (err) res.status(400).json(err);
