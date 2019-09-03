@@ -10,16 +10,16 @@ router.post(
   jwtHelper.requireAdmin,
   ctrlCompany.createCompany
 );
-router.get(
+router.get( 
   "/company",
   passport.authenticate("jwt", { session: false }),
-  jwtHelper.requireAdmin,
+  // jwtHelper.requireAdmin,
   ctrlCompany.companiesList
 );
 router.get(
   "/company/:id",
   passport.authenticate("jwt", { session: false }),
-  jwtHelper.requireAdmin,
+  //  jwtHelper.requireAdmin,
   ctrlCompany.findById
 );
 router.delete(

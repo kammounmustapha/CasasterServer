@@ -21,7 +21,9 @@ module.exports.createLicenseApplication = (req, res, next) => {
       comments: req.body.comments,
       approved: "0",
       user: req.user,
-      company: req.body.company
+      company: req.body.company,
+      status: "Pending",
+      actions: req.body.actions
     }
   });
 

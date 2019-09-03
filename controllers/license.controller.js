@@ -2,33 +2,11 @@ var mongoose = require("mongoose");
 var License = mongoose.model("License");
 
 module.exports.createLicense = (req, res, next) => {
-  var license = new License({
-    type: "Feature",
-    geometry: {},
-    properties: {
-      applicationDate: new Date()
-        .toString()
-        .replace(/T/, ":")
-        .replace(/\.\w*/, ""),
-      status: req.body.status,
-      parties: req.body.parties,
-      grantDate: req.body.grantDate,
-      expiryDate: req.body.expiryDate,
-      commodityGroups: req.body.commodityGroups,
-      jurisdiction: req.body.jurisdiction,
-      region: req.body.region,
-      district: req.body.district,
-      project: req.body.project,
-      responsibleOffice: req.body.responsibleOffice,
-      comments: req.body.comments,
-      companyId: req.body.companyId,
-      userId: req.user.id
-    }
-  });
+  var license = new License(req.body);
 
   license.save((err, doc) => {
     if (err) res.status(500).json(err);
-    else res.status(200).json({ License: doc });
+    else res.status(200).json({ doc: doc });
   });
 };
 
