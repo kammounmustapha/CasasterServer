@@ -76,7 +76,7 @@ module.exports.usersList = (req, res, next) => {
       else
         return res.status(200).json({
           status: true,
-          data: users
+          data: users.reverse()
         });
     });
 };

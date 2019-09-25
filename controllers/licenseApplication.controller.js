@@ -54,7 +54,7 @@ module.exports.delete = (req, res, next) => {
 module.exports.getAll = (req, res, next) => {
   LicenseApplication.find((err, docs) => {
     if (err) res.status(400).json(err);
-    else res.status(200).json({ docs: docs });
+    else res.status(200).json({ docs: docs.reverse() });
   });
 };
 

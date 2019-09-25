@@ -4,7 +4,7 @@ var Company = mongoose.model("Company");
 module.exports.companiesList = (req, res, next) => {
   Company.find((err, companies) => {
     if (err) res.json(err);
-    else res.json({ status: true, companies: companies });
+    else res.json({ status: true, companies: companies.reverse() });
   });
 };
 
